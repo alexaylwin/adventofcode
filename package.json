@@ -1,0 +1,21 @@
+{
+  "name": "aoc",
+  "version": "0.0.1",
+  "description": "Advent of Code repository",
+  "main": "index.ts",
+  "scripts": {
+    "start": "nodemon -q index.ts"
+  },
+  "nodemonConfig":{
+    "events": {
+      "start": "clear",
+      "restart": "clear"
+    }
+  },
+  "author": "Alex Aylwin",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1"
+  }
+}
