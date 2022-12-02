@@ -10,7 +10,12 @@
     "events": {
       "start": "clear",
       "restart": "clear"
-    }
+    },
+    "watch":[
+      "input.txt",
+      "index.ts",
+      "util/"
+    ]
   },
   "author": "Alex Aylwin",
   "license": "ISC",
