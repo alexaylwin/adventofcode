@@ -5,14 +5,6 @@ const input: string[] = inputraw.split('\n');
 
 const l = (s: any) => console.log(s);
 
-/** --- End Utilities and Set Up */
-
-/** Part One */
-
-const getCompartments = (sack: string): string[] => 
-  [ sack.substring(0, sack.length / 2),
-  sack.substring(sack.length / 2) ]
-
 const findSharedChar = (strings: string[]): string => {
   let charArrays: string[][] = strings.map( (v) => v.split(''));
   let res = '';
@@ -22,80 +14,49 @@ const findSharedChar = (strings: string[]): string => {
   return res;
 }
 
-const calcPriority = (item: string): number => 
+const calcCharCode = (item: string): number => 
 item.charCodeAt(0) > 90 ? item.charCodeAt(0) - 96 : item.charCodeAt(0) - 38
 
-/** Tests */
-const runTests = (): void => {
-  let errs: string[] = [];
-  /** getCompartments */
-  input.forEach( (sack: string) => {
-    const res = getCompartments(sack);
-    if(res[0].length != res[1].length) {
-      errs.push("Error - getCompartments length");
-    }
-  });
 
-  /** findSharedItem */
-  input.forEach( (sack: string, i) => {
-    const c = getCompartments(sack);
-    const res = findSharedChar(c);
-    switch (i) {
-      case 0:
-        if(res != 'p') errs.push('Error - findSharedItem 0 returned ' + res);
-        break;
-      case 1:
-        if(res != 'L') errs.push('Error - findSharedItem 0 returned ' + res);
-        break;
-      case 2:
-        if(res != 'P') errs.push('Error - findSharedItem 0 returned ' + res);
-        break;
-      case 3:
-        if(res != 'v') errs.push('Error - findSharedItem 0 returned ' + res);
-        break;
-      case 4:
-        if(res != 't') errs.push('Error - findSharedItem 0 returned ' + res);
-        break;
-      case 5:
-        if(res != 's') errs.push('Error - findSharedItem 0 returned ' + res);
-        break;      
-      }
-  })
-  //Print results
-  if( errs.length > 0 ) {
-    l("Errors occurred:")
-    errs.forEach( (e) => l(e) );
-  } else {
-    l("No errors");
+// const runTests = (tests: ((arg: any) => any)[]): void => {
+//   let errs: string[] = [];
+
+//   tests.forEach( (test) => test.)
+
+//   //Print results
+//   if( errs.length > 0 ) {
+//     l("Errors occurred:")
+//     errs.forEach( (e) => l(e) );
+//   } else {
+//     l("No errors");
+//   }  
+// }
+
+/** --- End Utilities and Set Up */
+
+type Assignment = {
+  start: number,
+  end: number
+}
+
+const getAssignmentPairs = (input: string[]): Assignment[][] => {
+  return input
+    .map( (line) => line.split(',') )
+    .map( (pair) => pair
+      .map( (assignmentString: string) => {
+        return { start: Number.parseInt(assignmentString.split('-')[0]), 
+                  end: Number.parseInt(assignmentString.split('-')[1])}
+      })
+    );
+}
+
+const findOverlap = (a:Assignment[]): number => {
+  if( (a[0].start <= a[1].start && a[0].end >= a[1].end)
+  || (a[1].start <= a[0].start && a[1].end >= a[0].end)) {
+    return 1
   }
+
+  return 0;
 }
 
-//runTests();
-
-// let res = input.reduce(
-//   (acc, curr) => {
-//     let priority = calcPriority(findSharedItem(getCompartments(curr)));
-//     return acc + priority;
-//   }
-// , 0)
-
-
-/** PART TWO */
-
-const getElfGroups = (input: string[]): string[][] => {
-  let res:string[][] = [];
-  let curr:string[] = [];
-  input.forEach( (v, i) => {
-    curr.push(v);
-    if(i > 0 && (i+1) % 3 == 0) {
-      res.push(curr);
-      curr = [];
-    }
-  })
-
-  return res;
-}
-l('---')
-l(getElfGroups(input).map((g) => findSharedChar(g)).map( (item) => calcPriority(item) ).reduce(
-  (acc, curr) => acc + curr, 0
-));
+l(getAssignmentPairs(input).reduce( (acc, pair) => acc + findOverlap(pair), 0));
