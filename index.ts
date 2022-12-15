@@ -14,6 +14,16 @@ const findSharedChar = (strings: string[]): string => {
   return res;
 }
 
+const genArray = (start: number, end: number): number[] => {
+  let i = start;
+  let ret = [];
+  while(i <= end) {
+    ret.push(i);
+    i++
+  }
+  return ret;
+}
+
 const calcCharCode = (item: string): number => 
 item.charCodeAt(0) > 90 ? item.charCodeAt(0) - 96 : item.charCodeAt(0) - 38
 
@@ -50,7 +60,7 @@ const getAssignmentPairs = (input: string[]): Assignment[][] => {
     );
 }
 
-const findOverlap = (a:Assignment[]): number => {
+const findContains = (a:Assignment[]): number => {
   if( (a[0].start <= a[1].start && a[0].end >= a[1].end)
   || (a[1].start <= a[0].start && a[1].end >= a[0].end)) {
     return 1
@@ -58,5 +68,15 @@ const findOverlap = (a:Assignment[]): number => {
 
   return 0;
 }
+
+const findOverlap = (pair:Assignment[]): number => {
+  const p1 = genArray(pair[0].start, pair[0].end);
+  const p2 = genArray(pair[1].start, pair[1].end);
+  let ret = 0;
+  p1.forEach( (v) => { if(p2.includes(v)) { ret = 1} })
+  return ret;
+}
+
+//l(getAssignmentPairs(input).reduce( (acc, pair) => acc + findContains(pair), 0));
 
 l(getAssignmentPairs(input).reduce( (acc, pair) => acc + findOverlap(pair), 0));
